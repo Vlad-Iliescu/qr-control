@@ -2,7 +2,6 @@
 #include "Request.h"
 #include "Config.h"
 #include "QRDetector.h"
-#include "Logger.h"
 #include "log_handlers/ConsoleHandler.h"
 #include "log_handlers/FileHandler.h"
 
@@ -17,17 +16,7 @@ int main() {
         logger->addHandlers(new ConsoleHandler());
     }
 
-    logger->debug("Started");
-    logger->info("Started");
-    logger->notice("Started");
-    logger->warning("Started");
-    logger->error("Started");
-    logger->critical("Started");
-    logger->alert("Started");
-    logger->emergency("Started");
-    logger->info("Started");
-
-    auto *request = new Request();
+    auto *request = new Request(logger);
     request->setUsername(config->camera->user);
     request->setPassword(config->camera->password);
     request->setHost(config->camera->host);
@@ -47,7 +36,7 @@ int main() {
                   << codes[i].size << std::endl;
     }
 
-    auto *request2 = new Request();
+    auto *request2 = new Request(logger);
     request2->setDebug(config->log_level == 7);
     request2->setHost(config->pms->host);
 

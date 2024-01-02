@@ -5,9 +5,10 @@
 
 void ConsoleHandler::log(LogLevel level, const char *msg) {
     char *const time = LogHandler::formattedTime();
+    const char *nl = this->isAppendNewLine() ? "\n" : "";
 
     this->beginLine(level);
-    fprintf(stderr, "%s main.%s: %s\n", time, LogHandler::levelStr(level), msg);
+    fprintf(stderr, "%s main.%s: %s%s", time, LogHandler::levelStr(level), msg, nl);
     this->endLine(level);
 
     free(time);

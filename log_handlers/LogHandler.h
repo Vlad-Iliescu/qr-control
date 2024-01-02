@@ -14,6 +14,8 @@ typedef enum {
 
 class LogHandler {
 private:
+    bool appendNewLine = true;
+
     virtual void log(LogLevel level, const char *msg) = 0;
 
     virtual void beginLine(LogLevel level) {};
@@ -36,6 +38,10 @@ public:
     void alert(const char *msg);
 
     void emergency(const char *msg);
+
+    bool isAppendNewLine() const;
+
+    void setAppendNewLine(bool appendNewLine);
 
     static const char *levelStr(LogLevel debug_level);
 

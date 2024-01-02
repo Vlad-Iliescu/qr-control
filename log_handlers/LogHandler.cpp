@@ -87,3 +87,11 @@ const char *LogHandler::getColor(LogLevel level) {
             return "";
     }
 }
+
+bool LogHandler::isAppendNewLine() const {
+    return appendNewLine;
+}
+
+void LogHandler::setAppendNewLine(bool appendNewLine) {
+    this->appendNewLine = appendNewLine;
+}

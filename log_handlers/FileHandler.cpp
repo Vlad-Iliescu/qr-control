@@ -17,8 +17,9 @@ FileHandler::~FileHandler() {
 void FileHandler::log(LogLevel level, const char *msg) {
     if (this->file != nullptr) {
         char *const time = LogHandler::formattedTime();
+        const char *nl = this->isAppendNewLine() ? "\n" : "";
 
-        fprintf(this->file, "%s main.%s: %s\n", time, LogHandler::levelStr(level), msg);
+        fprintf(this->file, "%s main.%s: %s%s", time, LogHandler::levelStr(level), msg, nl);
         fflush(this->file);
 
         free(time);

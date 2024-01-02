@@ -1,6 +1,11 @@
 #include "Logger.h"
 
+#include <cstdio>
+#include <cstdlib>
+
 using namespace std;
+
+//@todo: remove duplications
 
 Logger::Logger(LogLevel minimum_level) : min_level(minimum_level) {}
 
@@ -14,65 +19,190 @@ void Logger::addHandlers(LogHandler *handler) {
     this->handlers.push_back(handler);
 }
 
-void Logger::debug(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_DEBUG) {
-        for (auto &handler : this->handlers) {
-            handler->debug(msg);
-        }
+void Logger::debug(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_DEBUG) {
+        return;
     }
-}
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
 
-void Logger::info(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_INFO) {
-        for (auto &handler : this->handlers) {
-            handler->info(msg);
-        }
-    }
-}
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
 
-void Logger::notice(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_NOTICE) {
-        for (auto &handler : this->handlers) {
-            handler->notice(msg);
-        }
-    }
-}
-
-void Logger::warning(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_WARNING) {
-        for (auto &handler : this->handlers) {
-            handler->warning(msg);
-        }
-    }
-}
-
-void Logger::error(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_ERROR) {
-        for (auto &handler : this->handlers) {
-            handler->error(msg);
-        }
-    }
-}
-
-void Logger::critical(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_CRITICAL) {
-        for (auto &handler : this->handlers) {
-            handler->critical(msg);
-        }
-    }
-}
-
-void Logger::alert(const char *msg) {
-    if (this->min_level >= LogLevel::LEVEL_ALERT) {
-        for (auto &handler : this->handlers) {
-            handler->alert(msg);
-        }
-    }
-}
-
-void Logger::emergency(const char *msg) {
+    // pass error to handlers
     for (auto &handler : this->handlers) {
-        handler->emergency(msg);
+        handler->debug(buff);
     }
+
+    // cleanup
+    free(buff);
+    va_end(args);
 }
 
+void Logger::info(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_INFO) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->info(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::notice(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_NOTICE) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->notice(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::warning(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_WARNING) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->warning(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::error(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_ERROR) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->error(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::critical(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_CRITICAL) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->critical(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::alert(const char *format, ...) {
+    if (this->min_level < LogLevel::LEVEL_ALERT) {
+        return;
+    }
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->alert(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::emergency(const char *format, ...) {
+    // rebuild arguments
+    va_list args;
+    va_start(args, format);
+
+    // calc and create error char*
+    int needed = vsnprintf(nullptr, 0, format, args);
+    auto *buff = static_cast<char *>(malloc(sizeof(char) * (needed + 1)));
+    vsprintf(buff, format, args);
+
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->debug(buff);
+    }
+
+    // cleanup
+    free(buff);
+    va_end(args);
+}
+
+void Logger::setAutoAppendNewLine(bool appendNL) {
+    // pass error to handlers
+    for (auto &handler : this->handlers) {
+        handler->setAppendNewLine(appendNL);
+    }
+}

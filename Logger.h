@@ -2,6 +2,7 @@
 #define QR_CONTROL_LOGGER_H
 
 #include <vector>
+#include <cstdarg>
 #include "log_handlers/LogHandler.h"
 
 class Logger {
@@ -16,21 +17,23 @@ public:
 
     void addHandlers(LogHandler *handler);
 
-    void debug(const char *msg);
+    void debug(const char* format, ...);
 
-    void info(const char *msg);
+    void info(const char* format, ...);
 
-    void notice(const char *msg);
+    void notice(const char* format, ...);
 
-    void warning(const char *msg);
+    void warning(const char* format, ...);
 
-    void error(const char *msg);
+    void error(const char* format, ...);
 
-    void critical(const char *msg);
+    void critical(const char* format, ...);
 
-    void alert(const char *msg);
+    void alert(const char* format, ...);
 
-    void emergency(const char *msg);
+    void emergency(const char *format, ...);
+
+    void setAutoAppendNewLine(bool appendNL);
 };
 
 
