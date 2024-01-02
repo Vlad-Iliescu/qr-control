@@ -20,7 +20,7 @@ int main() {
 
     auto *request2 = new Request();
     request2->setDebug(config->log_level == 7);
-    request2->setHost("http://192.168.1.20:8989");
+    request2->setHost(config->pms->host);
 
     response = request2->post("/upload", response.data, response.size);
 

@@ -10,10 +10,17 @@ typedef struct {
     char *password;
 } camera_t;
 
+typedef struct {
+    char *host;
+    char *path;
+    char *user;
+    char *password;
+} pms_t;
 
 class Config {
 public:
     camera_t *camera = new camera_t;
+    pms_t *pms = new pms_t;
     int log_level = 0;
 
     Config(const char *json_file);

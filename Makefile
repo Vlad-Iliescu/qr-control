@@ -18,4 +18,4 @@ qr_control: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
-	rm -rf face_control tmp
+	rm -rf qr_control tmp

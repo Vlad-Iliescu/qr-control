@@ -40,6 +40,16 @@ Config::Config(const char *json_file) {
     this->readString(&this->camera->password, document["camera"]["password"].GetStringLength(),
                      document["camera"]["password"].GetString());
 
+    // read pms settings
+    this->readString(&this->pms->host, document["pms"]["host"].GetStringLength(),
+                     document["pms"]["host"].GetString());
+    this->readString(&this->pms->path, document["pms"]["path"].GetStringLength(),
+                     document["pms"]["path"].GetString());
+    this->readString(&this->pms->user, document["pms"]["user"].GetStringLength(),
+                     document["pms"]["user"].GetString());
+    this->readString(&this->pms->password, document["pms"]["password"].GetStringLength(),
+                     document["pms"]["password"].GetString());
+
     // cleanup
     free(buffer);
 }
@@ -50,9 +60,11 @@ void Config::readString(char **to, size_t size, const char *data) {
 }
 
 void Config::validateDocument(const rapidjson::Document &document) {
+    // log level
     assert(document.HasMember("log_level"));
     assert(document["log_level"].IsInt());
 
+    // camera config
     assert(document.HasMember("camera"));
     assert(document["camera"].IsObject());
 
@@ -67,4 +79,20 @@ void Config::validateDocument(const rapidjson::Document &document) {
 
     assert(document["camera"].HasMember("password"));
     assert(document["camera"]["password"].IsString());
+
+    // pms config
+    assert(document.HasMember("pms"));
+    assert(document["pms"].IsObject());
+
+    assert(document["pms"].HasMember("host"));
+    assert(document["pms"]["host"].IsString());
+
+    assert(document["pms"].HasMember("path"));
+    assert(document["pms"]["path"].IsString());
+
+    assert(document["pms"].HasMember("user"));
+    assert(document["pms"]["user"].IsString());
+
+    assert(document["pms"].HasMember("password"));
+    assert(document["pms"]["password"].IsString());
 }
