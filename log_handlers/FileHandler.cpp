@@ -1,5 +1,7 @@
 #include "FileHandler.h"
 
+#include <cstdlib>
+
 using namespace std;
 
 FileHandler::FileHandler(const char *path) : path(path) {

@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "QRDetector.h"
 #include "Logger.h"
+#include "log_handlers/FileHandler.h"
 
 int main() {
     auto *config = new Config("config.json");

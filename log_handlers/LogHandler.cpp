@@ -1,5 +1,7 @@
-#include <ctime>
 #include "LogHandler.h"
+
+#include <ctime>
+#include <cstdlib>
 
 void LogHandler::debug(const char *msg) {
     this->log(LogLevel::LEVEL_DEBUG, msg);

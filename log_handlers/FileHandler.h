@@ -1,8 +1,8 @@
 #ifndef QR_CONTROL_FILEHANDLER_H
 #define QR_CONTROL_FILEHANDLER_H
 
+#include <cstdio>
 #include "LogHandler.h"
-#include <fstream>
 
 class FileHandler : public LogHandler {
 private:

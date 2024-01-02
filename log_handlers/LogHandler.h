@@ -1,8 +1,6 @@
 #ifndef QR_CONTROL_LOGHANDLER_H
 #define QR_CONTROL_LOGHANDLER_H
 
-#include <fstream>
-
 typedef enum {
     LEVEL_EMERGENCY = 0, // will always be logged
     LEVEL_ALERT = 1, // will be logged on debug lvl 1 and above

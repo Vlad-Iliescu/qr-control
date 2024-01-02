@@ -1,18 +1,8 @@
 #ifndef QR_CONTROL_LOGGER_H
 #define QR_CONTROL_LOGGER_H
 
-#include <cstdio>
-#include <fstream>
 #include <vector>
 #include "log_handlers/LogHandler.h"
-#include "log_handlers/FileHandler.h"
-
-typedef enum {
-    LOG_TO_FILE,
-    LOG_TO_CONSOLE,
-    NO_LOGGING
-} log_strategy;
-
 
 class Logger {
 private:
@@ -20,7 +10,7 @@ private:
     std::vector<LogHandler *> handlers;
 
 public:
-    Logger(LogLevel minimum_level);
+    explicit Logger(LogLevel minimum_level);
 
     virtual ~Logger();
 
