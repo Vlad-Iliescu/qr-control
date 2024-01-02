@@ -22,6 +22,8 @@ int main() {
     auto *decoder = new QRDetector();
     decoder->loadFromData(response.data, response.size);
 
+    std::cout << decoder->getCode(0).payload;
+
 //    struct quirc *qr;
 //    qr = quirc_new();
 //    if (!qr) {

@@ -4,11 +4,19 @@
 #include "quirc.h"
 #include "image_formats/JPEG.h"
 
+typedef struct {
+    char *payload;
+    int x;
+    int y;
+    int size;
+} QR;
+
 class QRDetector {
 private:
     struct quirc *qr;
     uint8_t *image;
     int codes_count = 0;
+    QR *codes;
 
 public:
     QRDetector();
@@ -18,6 +26,10 @@ public:
     void loadFromData(byte *data, const size_t &size);
 
     int getCodesCount() const;
+
+    QR *getCodes() const;
+
+    QR getCode(int i) const;
 };
 
 
