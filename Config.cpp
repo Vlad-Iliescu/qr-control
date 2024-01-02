@@ -29,6 +29,7 @@ Config::Config(const char *json_file) {
     this->validateDocument(document);
 
     this->log_level = document["log_level"].GetInt();
+    this->readString(&this->log_path, document["log_path"].GetStringLength(), document["log_path"].GetString());
 
     // read camera settings
     this->readString(&this->camera->host, document["camera"]["host"].GetStringLength(),
@@ -63,6 +64,10 @@ void Config::validateDocument(const rapidjson::Document &document) {
     // log level
     assert(document.HasMember("log_level"));
     assert(document["log_level"].IsInt());
+
+    // log path
+    assert(document.HasMember("log_path"));
+    assert(document["log_path"].IsString());
 
     // camera config
     assert(document.HasMember("camera"));

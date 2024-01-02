@@ -2,9 +2,13 @@
 #include "Request.h"
 #include "Config.h"
 #include "QRDetector.h"
+#include "Logger.h"
 
 int main() {
     auto *config = new Config("config.json");
+
+    auto *logger = new Logger(LOG_TO_FILE, config->log_path, static_cast<t_debug>(config->log_level));
+    logger->info() << "Started";
 
     auto *request = new Request();
     request->setUsername(config->camera->user);
@@ -18,7 +22,7 @@ int main() {
     decoder->loadFromData(response.data, response.size);
 
     QR *codes = decoder->getCodes();
-    for (int i = 0; i<decoder->getCodesCount(); ++i) {
+    for (int i = 0; i < decoder->getCodesCount(); ++i) {
         std::cout << "QR[" << i << "]= " << std::endl
                   << codes[i].payload << std::endl
                   << codes[i].x << std::endl

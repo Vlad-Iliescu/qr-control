@@ -22,6 +22,7 @@ public:
     camera_t *camera = new camera_t;
     pms_t *pms = new pms_t;
     int log_level = 0;
+    char *log_path = nullptr;
 
     Config(const char *json_file);
 

@@ -11,5 +11,6 @@
     "user": "<user>",
     "password": "<password>"
   },
-  "log_level": 7
+  "log_level": 7,
+  "log_path": "logs/qr_control.log"
 }
