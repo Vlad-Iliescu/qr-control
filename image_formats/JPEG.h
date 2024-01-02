@@ -6,8 +6,18 @@
 #include <cstdint>
 #include <iostream>
 #include <jpeglib.h>
+#include <csetjmp>
+#include "../Logger.h"
 
 typedef unsigned char byte;
+
+typedef struct jpegErrorManager {
+    /* "public" fields */
+    struct jpeg_error_mgr pub;
+    /* for return to caller */
+    jmp_buf setjmp_buffer;
+} JpegError;
+
 
 class JPEG {
 private:
@@ -23,6 +33,8 @@ private:
 
     void startDecompressing();
 
+    Logger *logger;
+
 public:
     static void my_output_message(struct jpeg_common_struct *com);
 
@@ -30,7 +42,7 @@ public:
 
     static struct jpeg_error_mgr *my_error_mgr(struct jpeg_error_mgr *err);
 
-    JPEG(byte *data, const size_t &size);
+    JPEG(Logger *logger, byte *data, const size_t &size);
 
     virtual ~JPEG();
 
@@ -45,6 +57,10 @@ public:
     unsigned int getHeight();
 
     bool fillDecompressedBuffer(uint8_t *image);
+
+    void setLogger(Logger *logger);
+
+    Logger *getLogger() const;
 };
 
 

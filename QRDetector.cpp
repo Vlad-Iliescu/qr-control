@@ -19,12 +19,13 @@ QRDetector::QRDetector(Logger *logger) : logger(logger) {
 }
 
 QRDetector::~QRDetector() {
+    this->logger->debug("QR detector cleanup");
     quirc_destroy(this->qr);
     delete[] this->codes;
 }
 
 void QRDetector::loadFromData(byte *data, const size_t &size) {
-    auto *jpeg = new JPEG(data, size);
+    auto *jpeg = new JPEG(this->logger, data, size);
 
     std::cout << "size: " << jpeg->getWidth() << "x" << jpeg->getHeight() << std::endl;
 

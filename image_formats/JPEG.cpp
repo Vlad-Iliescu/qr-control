@@ -1,7 +1,7 @@
 #include "JPEG.h"
 
-JPEG::JPEG(byte *data, const size_t &size) : size(size), data(data) {
-
+JPEG::JPEG(Logger *logger, byte *data, const size_t &size) : size(size), data(data), logger(logger) {
+    this->getLogger()->info("starting decompression.");
     this->dinfo = new jpeg_decompress_struct();
     this->jerr = new jpeg_error_mgr();
     this->dinfo->err = JPEG::my_error_mgr(this->jerr);
@@ -36,17 +36,14 @@ void JPEG::startDecompressing() {
 
     // init decompression
     jpeg_create_decompress(this->dinfo);
-    std::cout << "created " << std::endl;
 
     // feed source
     jpeg_mem_src(this->dinfo, this->getData(), this->getSize());
-    std::cout << "mem aloc " << std::endl;
-
 
     // read header
     rc = jpeg_read_header(this->dinfo, TRUE);
-    std::cout << "header: " << rc << std::endl;
     if (!rc) {
+        logger->warning("Could not ");
         jpeg_destroy_decompress(this->dinfo);
         return;
     }
@@ -122,4 +119,12 @@ void JPEG::my_output_message(struct jpeg_common_struct *com) {
 
     com->err->format_message(com, buf);
     std::cout << buf << std::endl;
+}
+
+void JPEG::setLogger(Logger *logger) {
+    this->logger = logger;
+}
+
+Logger *JPEG::getLogger() const {
+    return logger;
 }
