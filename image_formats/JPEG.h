@@ -30,7 +30,6 @@ public:
 
     static struct jpeg_error_mgr *my_error_mgr(struct jpeg_error_mgr *err);
 
-
     JPEG(byte *data, const size_t &size);
 
     virtual ~JPEG();

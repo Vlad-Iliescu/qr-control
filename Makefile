@@ -5,8 +5,8 @@ LIBS = -lcurl -lquirc -ljpeg
 CFLAGS = -g -std=c++0x -L${QUIRC_SO_PATH} ${LIBS} -O3
 
 # Dependencies
-DEPS = Config.h Response.h Request.h image_formats/JPEG.h main.h
-OBJ = tmp/Config.o tmp/Response.o tmp/Request.o tmp/image_formats/JPEG.o tmp/main.o
+DEPS = Config.h Response.h Request.h image_formats/JPEG.h QRDetector.h main.h
+OBJ = tmp/Config.o tmp/Response.o tmp/Request.o tmp/image_formats/JPEG.o tmp/QRDetector.o tmp/main.o
 
 # Script to run before the make starts
 PRE_MAKE:=$(shell mkdir -p tmp/image_formats > /dev/null)

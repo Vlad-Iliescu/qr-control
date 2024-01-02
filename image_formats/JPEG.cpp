@@ -6,7 +6,6 @@ JPEG::JPEG(byte *data, const size_t &size) : size(size), data(data) {
     this->jerr = new jpeg_error_mgr();
     this->dinfo->err = JPEG::my_error_mgr(this->jerr);
     this->startDecompressing();
-
 }
 
 byte *JPEG::getData() const {
@@ -112,6 +111,7 @@ struct jpeg_error_mgr *JPEG::my_error_mgr(struct jpeg_error_mgr *err) {
 void JPEG::my_error_exit(struct jpeg_common_struct *com) {
     std::cout << "my_error_exit: " << com->err->msg_code << std::endl;
     JPEG::my_output_message(com);
+    //todo: recover: continue from here somehow
     exit(1);
 }
 

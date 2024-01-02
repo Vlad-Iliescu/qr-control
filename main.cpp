@@ -1,8 +1,7 @@
 #include <iostream>
 #include "Request.h"
 #include "Config.h"
-#include "quirc.h"
-#include "image_formats/JPEG.h"
+#include "QRDetector.h"
 
 int main() {
     auto *config = new Config("config.json");
@@ -20,58 +19,60 @@ int main() {
     response = request->get(config->camera->image_path);
 //    fwrite(response.data, sizeof(byte), response.size, f);
 
+    auto *decoder = new QRDetector();
+    decoder->loadFromData(response.data, response.size);
 
-    struct quirc *qr;
-    qr = quirc_new();
-    if (!qr) {
-        perror("Failed to allocate memory");
-        abort();
-    }
+//    struct quirc *qr;
+//    qr = quirc_new();
+//    if (!qr) {
+//        perror("Failed to allocate memory");
+//        abort();
+//    }
 
 //    if (quirc_resize(qr, 640, 480) < 0) {
 //        perror("Failed to allocate video memory");
 //        abort();
 //    }
 
-    uint8_t *image;
-    int w, h, rc;
+//    uint8_t *image;
+//    int w, h, rc;
 
 //    image = quirc_begin(qr, &w, &h);
 
-    auto *jpeg = new JPEG(response.data, response.size);
+//    auto *jpeg = new JPEG(response.data, response.size);
 
-    std::cout << "size: " << jpeg->getWidth() << "x" << jpeg->getHeight() << std::endl;
+//    std::cout << "size: " << jpeg->getWidth() << "x" << jpeg->getHeight() << std::endl;
 
-    rc = quirc_resize(qr, jpeg->getWidth(), jpeg->getHeight());
-    std::cout << "qr res: " << rc << std::endl;
+//    rc = quirc_resize(qr, jpeg->getWidth(), jpeg->getHeight());
+//    std::cout << "qr res: " << rc << std::endl;
 
-    image = quirc_begin(qr, nullptr, nullptr);
-    jpeg->fillDecompressedBuffer(image);
+//    image = quirc_begin(qr, nullptr, nullptr);
+//    jpeg->fillDecompressedBuffer(image);
 
-    quirc_end(qr);
-    int num_codes;
-    num_codes = quirc_count(qr);
-    std::cout << "CODES = " << num_codes << std::endl;
+//    quirc_end(qr);
+//    int num_codes;
+//    num_codes = quirc_count(qr);
+//    std::cout << "CODES = " << num_codes << std::endl;
 
-    for (int i = 0; i < num_codes; i++) {
-        struct quirc_code code;
-        struct quirc_data data;
-        quirc_decode_error_t err;
-
-        quirc_extract(qr, i, &code);
-
-        /* Decoding stage */
-        err = quirc_decode(&code, &data);
-        if (err)
-            std::cout << "DECODE FAILED: " << quirc_strerror(err) << std::endl;
-        else
-            std::cout << "Data: " << data.payload << std::endl;
-        std::cout << "Corcers: x=" << code.corners->x << ", y=" << code.corners->y << ", size=" << code.size
-                  << std::endl;
-    }
-
-
-    quirc_destroy(qr);
+//    for (int i = 0; i < num_codes; i++) {
+//        struct quirc_code code;
+//        struct quirc_data data;
+//        quirc_decode_error_t err;
+//
+//        quirc_extract(qr, i, &code);
+//
+//        /* Decoding stage */
+//        err = quirc_decode(&code, &data);
+//        if (err)
+//            std::cout << "DECODE FAILED: " << quirc_strerror(err) << std::endl;
+//        else
+//            std::cout << "Data: " << std::endl << data.payload << std::endl;
+//        std::cout << "Corcers: x=" << code.corners->x << ", y=" << code.corners->y << ", size=" << code.size
+//                  << std::endl;
+//    }
+//
+//
+//    quirc_destroy(qr);
 
 
 //    struct jpeg_decompress_struct dinfo;
