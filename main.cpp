@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "QRDetector.h"
 #include "Logger.h"
+#include "log_handlers/ConsoleHandler.h"
 #include "log_handlers/FileHandler.h"
 
 int main() {
@@ -12,10 +13,11 @@ int main() {
     if (config->log_file != nullptr) {
         logger->addHandlers(new FileHandler(config->log_file));
     }
+    if (config->log_console) {
+        logger->addHandlers(new ConsoleHandler());
+    }
 
-
-//    auto logger = new FileHandler(config->log_file);
-    logger->debug("Started");
+    logger->info("Started");
 
     auto *request = new Request();
     request->setUsername(config->camera->user);

@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 Logger::Logger(LogLevel minimum_level) : min_level(minimum_level) {}
 
 Logger::~Logger() {

@@ -8,6 +8,7 @@ CFLAGS = -g -std=c++0x -L${QUIRC_SO_PATH} ${LIBS} -O3
 DEPS = \
     log_handlers/LogHandler.h \
     log_handlers/FileHandler.h \
+    log_handlers/ConsoleHandler.h \
     Logger.h \
     Config.h \
     Response.h \
@@ -19,6 +20,7 @@ DEPS = \
 OBJ = \
     tmp/log_handlers/LogHandler.o \
     tmp/log_handlers/FileHandler.o \
+    tmp/log_handlers/ConsoleHandler.o \
     tmp/Logger.o \
     tmp/Config.o \
     tmp/Response.o \
