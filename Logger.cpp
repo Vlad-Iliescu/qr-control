@@ -1,54 +1,79 @@
 #include "Logger.h"
 
-#include <ctime>
-#include <iostream>
-
 using namespace std;
 
-#ifdef _WIN32
-#define _mkdir(pathname, mode) mkdir(pathname)
-#else
-#define _mkdir(pathname, mode) mkdir(pathname, mode)
-#endif
 
-Logger::Logger(log_strategy strategy, const char *path, t_debug minimum_level) : strategy(strategy),
-                                                                                 min_level(minimum_level), path(path) {
-    if (this->strategy == LOG_TO_FILE) {
-        std::cout << "LOG_TO_FILE: " << this->path << std::endl;
-
-//        struct stat st = {0};
-//        if (stat(this->path, &st) == -1) {
-//            std::cout << "mkdir: " << this->path << std::endl;
-//            _mkdir(this->path, 0755);
-//        }
-
-        this->log_file.open(this->path, ios::out | ios::app);
-    }
-}
+Logger::Logger(LogLevel minimum_level) : min_level(minimum_level) {}
 
 Logger::~Logger() {
-    if (this->strategy == LOG_TO_FILE) {
-        this->log_file.close();
+    for (auto &handler : this->handlers) {
+        delete handler;
     }
 }
 
-Logger::Logger(log_strategy strategy, t_debug minimum_level) : strategy(strategy), min_level(minimum_level) {}
+void Logger::addHandlers(LogHandler *handler) {
+    this->handlers.push_back(handler);
+}
 
-std::ofstream &Logger::info() {
-    char tmp_str[100];
-    time_t cur_time = time(nullptr);
-    strftime(tmp_str, 100, "[%Y-%m-%d %H:%M:%S]", localtime(&cur_time));
+void Logger::debug(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_DEBUG) {
+        for (auto &handler : this->handlers) {
+            handler->debug(msg);
+        }
+    }
+}
 
+void Logger::info(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_INFO) {
+        for (auto &handler : this->handlers) {
+            handler->info(msg);
+        }
+    }
+}
 
-    this->log_file << "\n"
-                   << tmp_str
-                   << "[INFO]";
+void Logger::notice(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_NOTICE) {
+        for (auto &handler : this->handlers) {
+            handler->notice(msg);
+        }
+    }
+}
 
-    std::cout << std::endl
-              << tmp_str
-              << "[INFO]";
+void Logger::warning(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_WARNING) {
+        for (auto &handler : this->handlers) {
+            handler->warning(msg);
+        }
+    }
+}
 
-    this->log_file.flush();
-    return this->log_file;
+void Logger::error(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_ERROR) {
+        for (auto &handler : this->handlers) {
+            handler->error(msg);
+        }
+    }
+}
+
+void Logger::critical(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_CRITICAL) {
+        for (auto &handler : this->handlers) {
+            handler->critical(msg);
+        }
+    }
+}
+
+void Logger::alert(const char *msg) {
+    if (this->min_level >= LogLevel::LEVEL_ALERT) {
+        for (auto &handler : this->handlers) {
+            handler->alert(msg);
+        }
+    }
+}
+
+void Logger::emergency(const char *msg) {
+    for (auto &handler : this->handlers) {
+        handler->emergency(msg);
+    }
 }
 

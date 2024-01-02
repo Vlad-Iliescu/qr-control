@@ -12,5 +12,6 @@
     "password": "<password>"
   },
   "log_level": 7,
-  "log_path": "logs/qr_control.log"
+  "log_file": "logs/qr_control.log",
+  "log_console": true
 }

@@ -29,7 +29,14 @@ Config::Config(const char *json_file) {
     this->validateDocument(document);
 
     this->log_level = document["log_level"].GetInt();
-    this->readString(&this->log_path, document["log_path"].GetStringLength(), document["log_path"].GetString());
+
+    if (document.HasMember("log_file") && document["log_file"].IsString()) {
+        this->readString(&this->log_file, document["log_file"].GetStringLength(), document["log_file"].GetString());
+    }
+
+    if (document.HasMember("log_console") && document["log_console"].IsBool()) {
+        this->log_console = document["log_console"].GetBool();
+    }
 
     // read camera settings
     this->readString(&this->camera->host, document["camera"]["host"].GetStringLength(),
@@ -65,10 +72,6 @@ void Config::validateDocument(const rapidjson::Document &document) {
     assert(document.HasMember("log_level"));
     assert(document["log_level"].IsInt());
 
-    // log path
-    assert(document.HasMember("log_path"));
-    assert(document["log_path"].IsString());
-
     // camera config
     assert(document.HasMember("camera"));
     assert(document["camera"].IsObject());
@@ -100,4 +103,23 @@ void Config::validateDocument(const rapidjson::Document &document) {
 
     assert(document["pms"].HasMember("password"));
     assert(document["pms"]["password"].IsString());
+}
+
+Config::~Config() {
+    // free camera
+    free(this->camera->host);
+    free(this->camera->password);
+    free(this->camera->image_path);
+    free(this->camera->user);
+    delete this->camera;
+
+    free(this->pms->host);
+    free(this->pms->password);
+    free(this->pms->path);
+    free(this->pms->user);
+    delete this->pms;
+
+    if (this->log_file != nullptr) {
+        free(this->log_file);
+    }
 }

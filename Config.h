@@ -22,9 +22,12 @@ public:
     camera_t *camera = new camera_t;
     pms_t *pms = new pms_t;
     int log_level = 0;
-    char *log_path = nullptr;
+    char *log_file = nullptr;
+    bool log_console = false;
 
     Config(const char *json_file);
+
+    virtual ~Config();
 
 private:
     void readString(char **to, size_t size, const char *data);

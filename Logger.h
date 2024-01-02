@@ -3,17 +3,9 @@
 
 #include <cstdio>
 #include <fstream>
-
-typedef enum {
-    LEVEL_EMERGENCY = 0, // will always be logged
-    LEVEL_ALERT = 1, // will be logged on debug lvl 1 and above
-    LEVEL_CRITICAL = 2, // same as above only on lvl 2
-    LEVEL_ERROR = 3,
-    LEVEL_WARNING = 4,
-    LEVEL_NOTICE = 5,
-    LEVEL_INFO = 6,
-    LEVEL_DEBUG = 7
-} t_debug;
+#include <vector>
+#include "log_handlers/LogHandler.h"
+#include "log_handlers/FileHandler.h"
 
 typedef enum {
     LOG_TO_FILE,
@@ -24,18 +16,31 @@ typedef enum {
 
 class Logger {
 private:
-    const char *path = nullptr;
-    t_debug min_level;
-    log_strategy strategy;
-    std::ofstream log_file;
-public:
-    Logger(log_strategy strategy, t_debug minimum_level);
+    LogLevel min_level;
+    std::vector<LogHandler *> handlers;
 
-    Logger(log_strategy strategy, const char *path, t_debug minimum_level);
+public:
+    Logger(LogLevel minimum_level);
 
     virtual ~Logger();
 
-    std::ofstream &info();
+    void addHandlers(LogHandler *handler);
+
+    void debug(const char *msg);
+
+    void info(const char *msg);
+
+    void notice(const char *msg);
+
+    void warning(const char *msg);
+
+    void error(const char *msg);
+
+    void critical(const char *msg);
+
+    void alert(const char *msg);
+
+    void emergency(const char *msg);
 };
 
 

@@ -7,8 +7,14 @@
 int main() {
     auto *config = new Config("config.json");
 
-    auto *logger = new Logger(LOG_TO_FILE, config->log_path, static_cast<t_debug>(config->log_level));
-    logger->info() << "Started";
+    auto *logger = new Logger(static_cast<LogLevel>(config->log_level));
+    if (config->log_file != nullptr) {
+        logger->addHandlers(new FileHandler(config->log_file));
+    }
+
+
+//    auto logger = new FileHandler(config->log_file);
+    logger->debug("Started");
 
     auto *request = new Request();
     request->setUsername(config->camera->user);
