@@ -64,3 +64,26 @@ char *LogHandler::formattedTime() {
     strftime(tmp_str, 50, "[%Y-%m-%d %H:%M:%S]", localtime(&cur_time));
     return tmp_str;
 }
+
+const char *LogHandler::getColor(LogLevel level) {
+    switch (level) {
+        case LogLevel::LEVEL_EMERGENCY:
+            return "\e[1m\e[38;5;1m";
+        case LogLevel::LEVEL_ALERT:
+            return "\e[31m";
+        case LogLevel::LEVEL_CRITICAL:
+            return "\e[91m";
+        case LogLevel::LEVEL_ERROR:
+            return "\e[38;5;202m";
+        case LogLevel::LEVEL_WARNING:
+            return "\e[33m";
+        case LogLevel::LEVEL_NOTICE:
+            return "\e[35m";
+        case LogLevel::LEVEL_INFO:
+            return "\e[34m";
+        case LogLevel::LEVEL_DEBUG:
+            return "\e[38;5;28m";
+        default:
+            return "";
+    }
+}

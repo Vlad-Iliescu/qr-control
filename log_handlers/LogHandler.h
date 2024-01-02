@@ -16,6 +16,10 @@ class LogHandler {
 private:
     virtual void log(LogLevel level, const char *msg) = 0;
 
+    virtual void beginLine(LogLevel level) {};
+
+    virtual void endLine(LogLevel level) {};
+
 public:
     void debug(const char *msg);
 
@@ -34,6 +38,8 @@ public:
     void emergency(const char *msg);
 
     static const char *levelStr(LogLevel debug_level);
+
+    static const char *getColor(LogLevel level);
 
     static char *formattedTime();
 };

@@ -7,6 +7,8 @@
 class ConsoleHandler : public LogHandler {
 private:
     void log(LogLevel level, const char *msg) override;
+    void beginLine(LogLevel level) override;
+    void endLine(LogLevel level) override;
 };
 
 

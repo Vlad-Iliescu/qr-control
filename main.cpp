@@ -17,6 +17,14 @@ int main() {
         logger->addHandlers(new ConsoleHandler());
     }
 
+    logger->debug("Started");
+    logger->info("Started");
+    logger->notice("Started");
+    logger->warning("Started");
+    logger->error("Started");
+    logger->critical("Started");
+    logger->alert("Started");
+    logger->emergency("Started");
     logger->info("Started");
 
     auto *request = new Request();
