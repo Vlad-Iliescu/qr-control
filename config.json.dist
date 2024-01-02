@@ -1,0 +1,10 @@
+{
+  "camera": {
+    "host": "http://192.168.1.13",
+    "image_path": "/record/current.jpg",
+    "user": "<user>",
+    "password": "<password>"
+  },
+
+  "log_level": 7
+}

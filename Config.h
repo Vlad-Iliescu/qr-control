@@ -1,0 +1,28 @@
+#ifndef FACE_CONTROL_CONFIG_H
+#define FACE_CONTROL_CONFIG_H
+
+#include "rapidjson/document.h"
+
+typedef struct {
+    char *host;
+    char *image_path;
+    char *user;
+    char *password;
+} camera_t;
+
+
+class Config {
+public:
+    camera_t *camera = new camera_t;
+    int log_level = 0;
+
+    Config(const char *json_file);
+
+private:
+    void readString(char **to, size_t size, const char *data);
+
+    void validateDocument(const rapidjson::Document &document);
+};
+
+
+#endif //FACE_CONTROL_CONFIG_H

@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+curl/
+lib/
+cmake-build-debug/
+
+face_control
+config.json
