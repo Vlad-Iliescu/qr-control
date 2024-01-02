@@ -1,7 +1,7 @@
 # Environment
 CC=g++
 QUIRC_SO_PATH = /opt/qr-control/quirc
-LIBS = -lcurl -lpthread -lm -ldl -lquirc
+LIBS = -lcurl -lquirc -ljpeg
 CFLAGS = -g -std=c++0x -L${QUIRC_SO_PATH} ${LIBS} -O3
 
 # Dependencies
