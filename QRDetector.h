@@ -9,6 +9,7 @@ typedef struct {
     int x;
     int y;
     int size;
+    bool error;
 } QR;
 
 class QRDetector {
@@ -16,7 +17,7 @@ private:
     struct quirc *qr;
     uint8_t *image;
     int codes_count = 0;
-    QR *codes;
+    QR *codes = nullptr;
 
 public:
     QRDetector();

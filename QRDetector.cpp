@@ -11,6 +11,7 @@ QRDetector::QRDetector() {
 
 QRDetector::~QRDetector() {
     quirc_destroy(this->qr);
+    delete[] this->codes;
 }
 
 void QRDetector::loadFromData(byte *data, const size_t &size) {
@@ -31,22 +32,24 @@ void QRDetector::loadFromData(byte *data, const size_t &size) {
     this->codes = new QR[this->codes_count];
     for (int i = 0; i < this->codes_count; i++) {
         struct quirc_code code;
-        struct quirc_data data;
+        struct quirc_data qr_data;
         quirc_decode_error_t err;
 
         quirc_extract(this->qr, i, &code);
 
         /* Decoding stage */
-        err = quirc_decode(&code, &data);
+        err = quirc_decode(&code, &qr_data);
         if (err) {
+            this->codes[i].error = true;
             std::cout << "DECODE FAILED: " << quirc_strerror(err) << std::endl;
         } else {
-            std::cout << "Data: " << data.payload << std::endl;
-            this->codes[i].payload = static_cast<char *>(malloc(static_cast<size_t>(data.payload_len)));
-            memcpy(this->codes[i].payload, data.payload, static_cast<size_t>(data.payload_len));
+            std::cout << "Data: " << qr_data.payload << std::endl;
+            this->codes[i].payload = static_cast<char *>(malloc(static_cast<size_t>(qr_data.payload_len)));
+            memcpy(this->codes[i].payload, qr_data.payload, static_cast<size_t>(qr_data.payload_len));
             this->codes[i].x = code.corners->x;
             this->codes[i].y = code.corners->y;
             this->codes[i].size = code.size;
+            this->codes[i].error = false;
         }
 
         std::cout << "Corcers: x=" << code.corners->x << ", y=" << code.corners->y << ", size=" << code.size
