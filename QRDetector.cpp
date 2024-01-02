@@ -9,6 +9,15 @@ QRDetector::QRDetector() {
     }
 }
 
+QRDetector::QRDetector(Logger *logger) : logger(logger) {
+    this->qr = quirc_new();
+    if (!this->qr) {
+        this->logger->emergency("[QUIRC]Failed to allocate memory");
+    } else {
+        this->logger->debug("QR detector initialized");
+    }
+}
+
 QRDetector::~QRDetector() {
     quirc_destroy(this->qr);
     delete[] this->codes;

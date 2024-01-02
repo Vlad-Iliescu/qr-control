@@ -3,6 +3,7 @@
 
 #include "quirc.h"
 #include "image_formats/JPEG.h"
+#include "Logger.h"
 
 typedef struct {
     char *payload;
@@ -18,9 +19,12 @@ private:
     uint8_t *image;
     int codes_count = 0;
     QR *codes = nullptr;
+    Logger *logger;
 
 public:
     QRDetector();
+
+    QRDetector(Logger *logger);
 
     virtual ~QRDetector();
 

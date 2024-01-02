@@ -1,4 +1,5 @@
 #include "Request.h"
+#include <chrono>
 
 using namespace std;
 
@@ -34,7 +35,12 @@ Request::Request(Logger *logger) : logger(logger) {
 }
 
 Response Request::get(const char *url) {
-    this->getLogger()->debug("Starting GET request.");
+    this->getLogger()->info("Starting GET request.");
+    if (!this->isInitOk()) {
+        this->getLogger()->error("cURL not correctly initialized.");
+        return Response();
+    }
+
     this->setVerbosity();
     this->addBasicAuth();
     this->addURL(url);
@@ -53,11 +59,17 @@ Response Request::get(const char *url) {
 }
 
 Request::~Request() {
+    this->getLogger()->debug("Cleaning up request");
     curl_easy_cleanup(this->curl);
 }
 
 int Request::get(const char *url, FILE *file) {
-    this->getLogger()->debug("Starting GET request.");
+    this->getLogger()->info("Starting GET request.");
+    if (!this->isInitOk()) {
+        this->getLogger()->error("cURL not correctly initialized.");
+        return 0;
+    }
+
     this->setVerbosity();
     this->addBasicAuth();
     this->addURL(url);
@@ -118,13 +130,18 @@ void Request::addURL(const char *url) {
         auto *buffer = static_cast<char *>(std::calloc(size, sizeof(char)));
         sprintf(buffer, "%s%s", this->getHost(), url);
 
-        this->getLogger()->debug("Setting url [%s].", buffer);
+        this->getLogger()->info("Setting url [%s].", buffer);
         curl_easy_setopt(this->curl, CURLOPT_URL, buffer);
     }
 }
 
 Response Request::post(const char *url, byte *data, size_t size) {
-    this->getLogger()->debug("Starting POST request.");
+    this->getLogger()->info("Starting POST request.");
+    if (!this->isInitOk()) {
+        this->getLogger()->error("cURL not correctly initialized.");
+        return Response();
+    }
+
     this->setVerbosity();
     this->addBasicAuth();
     this->addURL(url);
@@ -181,14 +198,21 @@ void Request::setLogger(Logger *logger) {
 }
 
 int Request::doCall() {
+    typedef std::chrono::high_resolution_clock Clock;
+    auto start = Clock::now();
+
     CURLcode res = curl_easy_perform(this->curl);
     int httpCode = 0;
 
+    double diff = std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - start).count() / 1000000.0;
+    this->getLogger()->info("Got result in %.2lfms.", diff);
+
     if (res == CURLE_OK) {
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
-        this->getLogger()->info("%d", httpCode);
         if (200 > httpCode || httpCode >= 400) {
             this->getLogger()->warning("cURL returned HTTP code %d.", httpCode);
+        } else {
+            this->getLogger()->info("cURL returned HTTP code %d.", httpCode);
         }
     } else {
         this->getLogger()->error("cURL error: %s.", curl_easy_strerror(res));

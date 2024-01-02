@@ -23,8 +23,9 @@ int main() {
     request->setDebug(config->log_level == 7);
 
     Response response = request->get(config->camera->image_path);
+    delete request;
 
-    auto *decoder = new QRDetector();
+    auto *decoder = new QRDetector(logger);
     decoder->loadFromData(response.data, response.size);
 
     QR *codes = decoder->getCodes();
@@ -39,8 +40,8 @@ int main() {
     auto *request2 = new Request(logger);
     request2->setDebug(config->log_level == 7);
     request2->setHost(config->pms->host);
-
     response = request2->post(config->pms->path, response.data, response.size);
+    delete request2;
 
     std::cout << "ENDING! " << std::endl;
 
