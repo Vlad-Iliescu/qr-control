@@ -14,6 +14,7 @@ DEPS = \
     Response.h \
     Request.h \
     image_formats/JPEG.h \
+    image_formats/jpeg_with_exception.h \
     QRDetector.h \
     main.h
 
@@ -26,6 +27,7 @@ OBJ = \
     tmp/Response.o \
     tmp/Request.o \
     tmp/image_formats/JPEG.o \
+    tmp/image_formats/jpeg_with_exception.o \
     tmp/QRDetector.o \
     tmp/main.o
 

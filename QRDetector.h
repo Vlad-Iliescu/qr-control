@@ -2,8 +2,10 @@
 #define QR_CONTROL_QRDETECTOR_H
 
 #include "quirc.h"
-#include "image_formats/JPEG.h"
+//#include "image_formats/JPEG.h"
 #include "Logger.h"
+
+typedef unsigned char byte;
 
 typedef struct {
     char *payload;

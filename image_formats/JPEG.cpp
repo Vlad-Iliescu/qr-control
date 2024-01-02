@@ -1,11 +1,19 @@
 #include "JPEG.h"
 
+#include <stdexcept>
+
 JPEG::JPEG(Logger *logger, byte *data, const size_t &size) : size(size), data(data), logger(logger) {
-    this->getLogger()->info("starting decompression.");
-    this->dinfo = new jpeg_decompress_struct();
-    this->jerr = new jpeg_error_mgr();
-    this->dinfo->err = JPEG::my_error_mgr(this->jerr);
-    this->startDecompressing();
+//    try {
+//    this->getLogger()->info("starting decompression.");
+//    this->dinfo = new jpeg_decompress_struct();
+//    this->jerr = new jpeg_error_mgr();
+//    jpeg_std_error(this->jerr);
+
+//    this->jerr->error_exit = [](j_common_ptr cinfo) { throw std::runtime_error("IERROR"); };
+//    this->jerr->output_message = JPEG::my_output_message;
+
+//    this->dinfo->err = this->jerr;
+//    this->startDecompressing();
 }
 
 byte *JPEG::getData() const {
@@ -32,7 +40,15 @@ bool JPEG::fillDecompressedBuffer(uint8_t *image) {
 
 void JPEG::startDecompressing() {
 
-    int rc;
+    this->getLogger()->info("starting decompression.");
+    this->dinfo = new jpeg_decompress_struct();
+    this->jerr = new jpeg_error_mgr();
+    jpeg_std_error(this->jerr);
+
+    this->jerr->error_exit = [&](j_common_ptr cinfo) { return; };
+    this->dinfo->err = this->jerr;
+
+    int rc = 0;
 
     // init decompression
     jpeg_create_decompress(this->dinfo);
@@ -41,7 +57,9 @@ void JPEG::startDecompressing() {
     jpeg_mem_src(this->dinfo, this->getData(), this->getSize());
 
     // read header
+
     rc = jpeg_read_header(this->dinfo, TRUE);
+
     if (!rc) {
         logger->warning("Could not ");
         jpeg_destroy_decompress(this->dinfo);
@@ -71,7 +89,6 @@ void JPEG::startDecompressing() {
         return;
     }
     this->_correct_components_count = true;
-
 }
 
 unsigned int JPEG::getWidth() {
@@ -96,30 +113,30 @@ bool JPEG::isDecompressionSuccess() {
     return this->_header_read && this->_decompression_started && this->_correct_components_count;
 }
 
-struct jpeg_error_mgr *JPEG::my_error_mgr(struct jpeg_error_mgr *err) {
-    jpeg_std_error(err);
+//struct jpeg_error_mgr *JPEG::my_error_mgr(struct jpeg_error_mgr *err) {
+//    jpeg_std_error(err);
+//
+//    err->error_exit = JPEG::my_error_exit;
+//    err->output_message = JPEG::my_output_message;
+//
+//    return err;
+//}
 
-    err->error_exit = JPEG::my_error_exit;
-    err->output_message = JPEG::my_output_message;
+//void JPEG::my_error_exit(struct jpeg_common_struct *com) {
+//    std::cout << "my_error_exit: " << com->err->msg_code << std::endl;
+//    JPEG::my_output_message(com);
+//    //todo: recover: continue from here somehow
+//    exit(1);
+//}
 
-    return err;
-}
-
-void JPEG::my_error_exit(struct jpeg_common_struct *com) {
-    std::cout << "my_error_exit: " << com->err->msg_code << std::endl;
-    JPEG::my_output_message(com);
-    //todo: recover: continue from here somehow
-    exit(1);
-}
-
-void JPEG::my_output_message(struct jpeg_common_struct *com) {
-    std::cout << "my_output_message: ";
-
-    char buf[JMSG_LENGTH_MAX];
-
-    com->err->format_message(com, buf);
-    std::cout << buf << std::endl;
-}
+//void JPEG::my_output_message(struct jpeg_common_struct *com) {
+//    std::cout << "my_output_message: ";
+//
+//    char buf[JMSG_LENGTH_MAX];
+//
+//    com->err->format_message(com, buf);
+//    std::cout << buf << std::endl;
+//}
 
 void JPEG::setLogger(Logger *logger) {
     this->logger = logger;

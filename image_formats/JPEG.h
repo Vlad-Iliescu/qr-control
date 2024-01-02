@@ -31,16 +31,17 @@ private:
     struct jpeg_decompress_struct *dinfo;
     struct jpeg_error_mgr *jerr;
 
-    void startDecompressing();
+//    void startDecompressing();
 
     Logger *logger;
 
 public:
-    static void my_output_message(struct jpeg_common_struct *com);
+    void startDecompressing();
+//    static void my_output_message(struct jpeg_common_struct *com);
 
-    static void my_error_exit(struct jpeg_common_struct *com);
+//    static void my_error_exit(struct jpeg_common_struct *com);
 
-    static struct jpeg_error_mgr *my_error_mgr(struct jpeg_error_mgr *err);
+//    static struct jpeg_error_mgr *my_error_mgr(struct jpeg_error_mgr *err);
 
     JPEG(Logger *logger, byte *data, const size_t &size);
 
