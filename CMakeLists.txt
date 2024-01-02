@@ -7,4 +7,5 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCURL_STATICLIB")
 
 add_executable(qr_control main.cpp main.h Request.cpp Request.h Response.cpp Response.h Config.cpp Config.h)
 find_library (CURL_LIB libcurl PATHS ${qr_control_SOURCE_DIR}/lib)
-TARGET_LINK_LIBRARIES(qr_control ${CURL_LIB})
+find_library (QUIRC_LIB libquirc PATHS ${qr_control_SOURCE_DIR}/lib)
+TARGET_LINK_LIBRARIES(qr_control ${CURL_LIB} ${QUIRC_LIB})

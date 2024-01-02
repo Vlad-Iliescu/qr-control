@@ -1,7 +1,8 @@
 # Environment
 CC=g++
-LIBS = -lcurl -lpthread -lm -ldl
-CFLAGS = -g -std=c++0x ${LIBS} -O3
+QUIRC_SO_PATH = /opt/qr-control/quirc
+LIBS = -lcurl -lpthread -lm -ldl -lquirc
+CFLAGS = -g -std=c++0x -L${QUIRC_SO_PATH} ${LIBS} -O3
 
 # Dependencies
 DEPS = main.h Config.h Response.h Request.h
